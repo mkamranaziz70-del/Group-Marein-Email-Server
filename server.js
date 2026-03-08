@@ -10,8 +10,8 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "yourgmail@gmail.com",
-    pass: "gmail_app_password",
+    user: "mkamranaziz70@gmail.com",
+    pass: "zcvbxsnnslsqsabz",
   },
 });
 
@@ -19,7 +19,7 @@ app.post("/send-credentials", async (req, res) => {
   const { email, password } = req.body;
 
   const mailOptions = {
-    from: "Groupe Marien <yourgmail@gmail.com>",
+    from: "Groupe Marien <mkamranaziz70@gmail.com>",
     to: email,
     subject: "Your Groupe Marien Account",
     html: `
