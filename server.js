@@ -16,18 +16,30 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send-credentials", async (req, res) => {
-  const { email, password } = req.body;
-
+const { email, password, accessCode } = req.body;
+  
   const mailOptions = {
     from: "Groupe Marien <mkamranaziz70@gmail.com>",
     to: email,
     subject: "Your Groupe Marien Account",
-    html: `
-      <h2>Welcome to Groupe Marien</h2>
-      <p>Your storage account has been created.</p>
-      <p><b>Email:</b> ${email}</p>
-      <p><b>Password:</b> ${password}</p>
-      <p>Please login and change your password.</p>
+   html: `
+<h2>Welcome to Groupe Marien</h2>
+
+<p>Your storage unit reservation is confirmed.</p>
+
+<h3>Account Credentials</h3>
+<p><b>Email:</b> ${email}</p>
+<p><b>Password:</b> ${password}</p>
+
+<h3>Access Code</h3>
+<p>Your facility access code:</p>
+
+<h2 style="color:#2563EB">${accessCode}</h2>
+
+<p>Use this code to access your storage facility.</p>
+
+<p>Please login and change your password after first login.</p>
+`
     `,
   };
 
