@@ -93,7 +93,119 @@ app.post("/send-credentials", async (req, res) => {
   }
 
 });
+app.post("/send-invoice", async (req, res) => {
 
+  const { email, customerName, invoiceId, amount, dueDate, unitName, method } = req.body;
+
+  const mailOptions = {
+    from: "Groupe Marien <mkamranaziz70@gmail.com>",
+    to: email,
+    subject: `Invoice ${invoiceId} - Groupe Marien`,
+    html: `
+    <div style="font-family:Arial;padding:20px">
+
+      <h2>Invoice Notification</h2>
+
+      <p>Hello ${customerName},</p>
+
+      <p>Your invoice has been generated.</p>
+
+      <hr/>
+
+      <p><b>Invoice ID:</b> ${invoiceId}</p>
+      <p><b>Unit:</b> ${unitName}</p>
+      <p><b>Amount:</b> $${amount}</p>
+      <p><b>Payment Method:</b> ${method}</p>
+      <p><b>Due Date:</b> ${dueDate}</p>
+
+      <br/>
+
+      <p>Please complete your payment before the due date.</p>
+
+      <hr/>
+
+      <p style="color:#777">Groupe Marien Billing</p>
+
+    </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+
+    res.json({
+      success: true,
+      message: "Invoice email sent",
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      error: err.toString(),
+    });
+
+  }
+});
+app.post("/send-reminder", async (req, res) => {
+
+  const { email, customerName, invoiceId, amount, dueDate, status } = req.body;
+
+  const mailOptions = {
+    from: "Groupe Marien <mkamranaziz70@gmail.com>",
+    to: email,
+    subject: `Payment Reminder - Invoice ${invoiceId}`,
+
+    html: `
+    <div style="font-family:Arial;padding:20px">
+
+      <h2 style="color:#EF4444">Payment Reminder</h2>
+
+      <p>Hello ${customerName},</p>
+
+      <p>This is a reminder that your invoice is currently <b>${status}</b>.</p>
+
+      <hr/>
+
+      <p><b>Invoice ID:</b> ${invoiceId}</p>
+      <p><b>Amount Due:</b> $${amount}</p>
+      <p><b>Due Date:</b> ${dueDate}</p>
+
+      <br/>
+
+      <p>Please make your payment as soon as possible.</p>
+
+      <hr/>
+
+      <p style="color:#777">Groupe Marien Billing</p>
+
+    </div>
+    `,
+  };
+
+  try {
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({
+      success: true,
+      message: "Reminder email sent",
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      error: err.toString(),
+    });
+
+  }
+
+});
 /* ================= SERVER ================= */
 
 app.listen(3000, () => {
